@@ -71,12 +71,12 @@ class Threshold(BaseEstimator, ClassifierMixin):
         self.model = model
         self.strategy = strategy
 
-    def fit(self, X, y):
+    def fit(self, X, y, fine_y=None):
         # self.classes_ = np.unique(y)  # required by sklearn
         # for our datasets, this makes more sense:
         self.classes_ = np.arange(np.amax(y)+1, dtype=int)
 
-        self.model.fit(X, y)
+        self.model.fit(X, fine_y if fine_y is not None else y)
         s = self.model.predict_proba(X)
 
         # this class ensure that scores are ordered
@@ -86,6 +86,7 @@ class Threshold(BaseEstimator, ClassifierMixin):
 
         self.ths = decide_thresholds(
             s, y, len(self.classes_), self.strategy)
+
         return self
 
     def predict(self, X):
@@ -95,4 +96,3 @@ class Threshold(BaseEstimator, ClassifierMixin):
 
     def predict_proba(self, X):
         return self.model.predict_proba(X)
-
