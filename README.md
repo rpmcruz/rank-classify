@@ -13,10 +13,11 @@ The ideia is we train with a pairwise scoring rank (based on ranksvm) using an o
     python3 run.py train.txt test.txt [OPTIONS]
 
 Options are:
-- **--strategy=xxx** where *xxx* is the threshold strategy. Options are: uniform, inverse and absolute. (default is uniform)
-- **--cv** to enable cross-validation of C (from 10^-3 to 10^3)
+- **--strategy xxx** where *xxx* is the threshold strategy. Options are: uniform, inverse and absolute. (default is uniform)
+- **--cv 1** to enable cross-validation of C (from 10^-3 to 10^3)
 - **--svm** to use ordinary svm (not our ranking)
 - **--svm-balanced** to use ordinary svm with inverse frequencies as the cost matrix
+- **--lightsvm-rbf** or **--lightsvm-linear** to use Joaquims' [lightsvm code](https://www.cs.cornell.edu/people/tj/svm_light/svm_rank.html) (you need first to `make` the code under `svm_rank`)
 
 ## Requirements
 
