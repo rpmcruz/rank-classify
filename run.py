@@ -1,6 +1,7 @@
 from rank import RankSVM
 from threshold import Threshold
 from sklearn.svm import LinearSVC
+from rank_svmlight import SVMLight
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, mean_absolute_error
 import numpy as np
@@ -25,7 +26,7 @@ def get_args():
                         'inverse, absolute)')
     parser.add_argument('--model', metavar="M", nargs='?',
                         default='rank',
-                        help='Classifier (rank, svm, svm-balanced)')
+                        help='Classifier (rank, svm, svm-balanced, lightsvm-linear, lightsvm-rbf)')
     parser.add_argument('--coarse', metavar="C", type=float, nargs='+',
                         default=None,
                         help='Inter-class Threshold')
@@ -70,6 +71,10 @@ elif args.model == 'svm-balanced':
 elif args.model == 'rank':
     model = Threshold(RankSVM(), args.strategy)
     cv_param = 'model__model__C'
+elif args.model.startswith('lightsvm'):
+    kernel = args.model[9:]
+    model = Threshold(SVMLight(1, kernel), args.strategy)
+    cv_param = 'model__C'
 
 
 if args.cv:
