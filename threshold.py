@@ -57,6 +57,10 @@ def decide_thresholds(scores, y, k, strategy, full=False):
         w = np.repeat(len(y) / (k*(np.bincount(y)+1)), k).reshape((k, k)) * (1-np.eye(k))
     elif strategy == 'absolute':
         w = [[np.abs(i-j) for i in range(k)] for j in range(k)]
+    elif strategy == 'inverse-absolute':
+        w1 = np.repeat(len(y) / (k*(np.bincount(y)+1)), k).reshape((k, k)) * (1-np.eye(k))
+        w2 = [[np.abs(i-j) for i in range(k)] for j in range(k)]
+        w = w1*w2
     else:
         raise 'No such threshold strategy: %s' % strategy
     return _decide_thresholds(scores, y, k, w)
